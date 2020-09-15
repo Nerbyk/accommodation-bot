@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  block: MyString
+  room: 1
+  name: MyString
+  surname: 
+
+two:
+  block: MyString
+  room: 1
+  name: MyString
+  surname: 
