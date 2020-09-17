@@ -9,8 +9,9 @@ class ParserController < ApplicationController
             name,surname = pull_info student
             block = req_str.split('-').first
             room  = req_str.split('-').last
-            p "Name: #{name} | Surname: #{surname} | block: #{block} | room: #{room}"
-            Student.create(name: name, surname: surname, block: req_str.split)
+            floor = room[1]
+            p "Name: #{name} | Surname: #{surname} | block: #{block} | room: #{room} | floor: #{floor} "
+            Student.create(name: name, surname: surname, block: block, room: room, floor: floor)
        end 
     end 
 

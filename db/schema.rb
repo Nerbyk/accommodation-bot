@@ -14,6 +14,7 @@ ActiveRecord::Schema.define(version: 2020_09_15_110122) do
 
   create_table "students", force: :cascade do |t|
     t.string "block"
+    t.integer "floor"
     t.integer "room"
     t.string "name"
     t.string "surname"
