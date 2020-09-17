@@ -5,8 +5,8 @@ require File.expand_path('../config/environment', __dir__)
 require 'telegram/bot'
 require 'dotenv'
 
-require './responder/responder'
-require './responder/admin_responder'
+require './responder/responder.rb'
+require './responder/admin_responder.rb'
 
 token = ENV['TELEGRAM_TOKEN']
 
