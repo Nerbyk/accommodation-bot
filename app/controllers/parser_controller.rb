@@ -6,7 +6,11 @@ class ParserController < ApplicationController
        response = response.split('hledaný řetezec: --> ').last
        students = to_split(response)
        students.each do |student| 
-            pull_info student
+            name,surname = pull_info student
+            block = req_str.split('-').first
+            room  = req_str.split('-').last
+            p "Name: #{name} | Surname: #{surname} | block: #{block} | room: #{room}"
+            Student.create(name: name, surname: surname, block: req_str.split)
        end 
     end 
 
@@ -35,6 +39,7 @@ class ParserController < ApplicationController
     end 
 
     def pull_info student 
-        # TODO: Pull info from string for db
+        student = student.split('Jméno:').first.split(' ')
+        return student.first, student.last
     end 
 end 

@@ -2,38 +2,32 @@
 
 require File.expand_path('../config/environment', __dir__)
 
-require 'webdrivers'
 
-URL = 'http://www.kn.vutbr.cz/is2/'
-
-# Student.delete_all
+Student.delete_all
 
 BLOCKS = %w[A03 A02 A04]
 
-# def to_database(array)
+def parse_browser(block, floors, rooms)
 
-# end
+  (1..floors).each do |floor|
+    (1..rooms).each do |room|
+      room = '0' + room.to_s if room < 10
 
-# def parse_browser(block, floors, rooms)
-#   (1..floors).each do |floor|
-#     (1..rooms).each do |room|
-    
-#     end
-#   end
-# end 
+      parser = ParserController.new
+      parser.parse("#{block}-0#{floor}#{room}")
+    end
+  end
+end 
 
-# BLOCKS.each do |block|
-#   floors = 9
-#   rooms = 41
+BLOCKS.each do |block|
+  floors = 9
+  rooms = 41
 
-#   Thread.new do  
-#       parse_browser(block, floors, rooms)
-#   end 
+  # Thread.new do  
+      parse_browser(block, floors, rooms)
+  # end 
 
-# end
-
-parser = ParserController.new
-parser.parse('A03-0526')
+end
 
 
 
