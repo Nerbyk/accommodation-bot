@@ -131,6 +131,9 @@ GEM
       mini_portile2 (~> 2.4.0)
     nokogiri (1.10.10-x86-mingw32)
       mini_portile2 (~> 2.4.0)
+    pg (1.2.3)
+    pg (1.2.3-x64-mingw32)
+    pg (1.2.3-x86-mingw32)
     public_suffix (4.0.6)
     puma (4.3.6)
       nio4r (~> 2.0)
@@ -181,7 +184,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     telegram-bot-ruby (0.12.0)
       faraday
       inflecto
@@ -229,10 +231,10 @@ DEPENDENCIES
   capybara (>= 2.15)
   dotenv-rails (~> 2.1, >= 2.1.1)
   listen (~> 3.2)
+  pg (= 1.2.3)
   puma (~> 4.1)
   rails (~> 6.0.3, >= 6.0.3.3)
   selenium-webdriver
-  sqlite3 (~> 1.4)
   telegram-bot-ruby
   tzinfo-data
   web-console (>= 3.3.0)
