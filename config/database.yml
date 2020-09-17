@@ -21,5 +21,9 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+   <<: *default
+    adapter: postgresql
+    encoding: unicode
+    database: accomodation-bot_production
+    username: accomodation-bot
+    password: <%= ENV['ACCOMODATION_BOT_DATABASE_PASSWORD'] %>
