@@ -3,14 +3,20 @@
 require File.expand_path('../config/environment', __dir__)
 
 require 'telegram/bot'
+require 'dotenv'
 
-Dir['./responder/*.rb'].sort.each { |file| require file }
+require './responder/responder'
+require './responder/admin_responder'
 
 token = ENV['TELEGRAM_TOKEN']
 
 Telegram::Bot::Client.run(token) do |bot|
   bot.listen do |message|
-    Responder.new(message, bot)
+    if message.from.id == ENV['ADMIN_ID'].to_i
+      AdminResponder.new(message, bot)
+    else
+      Responder.new(message, bot)
+    end
   rescue StandardError => e
     bot.api.send_message(chat_id: message.from.id, text: "error: #{e}")
   end
