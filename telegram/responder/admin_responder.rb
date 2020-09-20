@@ -8,6 +8,13 @@ class AdminResponder < Responder
       respond_to_access_request(*message.text.split('_'))
     elsif message.text.include?('/user_')
         get_user_link(message.text.split('_').last)
+    elsif message.text == '/users'
+        users = User.all
+        bot_users = users.map do 
+          |user| 
+          return "User: <a href=\"tg://user?id=#{user.telegram_id}\">#{user.telegram_id}</a> Registrated: #{user.updated_at.strftime('%a %d %b %Y').to_s}\n\n"
+        end 
+        bot.api.send_message(chat_id: message.from.id, text: bot_users)
     else
       find_student(message.text)
     end
