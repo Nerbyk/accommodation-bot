@@ -58,9 +58,14 @@ class Responder
     end
   end
 
+  def log_search(string)
+    user.step = string
+  end 
+
   def find_student(string)
     search_str = string
     search_by = check_search_case(string)
+
     case search_by
     when 'name'
       request = Student.where(name: search_str)
@@ -83,6 +88,7 @@ class Responder
       raise 'Invalid Input'
     end
 
+    log_search(string)
     render_person request
   end
 

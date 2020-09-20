@@ -25,6 +25,7 @@ class AdminResponder < Responder
         bot.api.send_message(chat_id: message.from.id, text: bot_users, parse_mode: "HTML")
   end 
 
+
   def get_user_link(user_id)
     bot.api.send_message(chat_id: message.from.id, text: "User <a href=\"tg://user?id=#{user_id}\">#{user_id}</a>", parse_mode: "HTML")
   end 
