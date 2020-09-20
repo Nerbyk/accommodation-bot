@@ -19,7 +19,7 @@ class Responder
     return 'name' if !!string.capitalize.match(/^[a-zA-Z]*$/)
     return 'name_surname' if !!string.capitalize.match(/^[a-zA-Z]{0,19}[\s,][a-zA-Z]{0,19}$/)
     return 'floor' if !!string.match(/^[A-Ba-b]{1}0[1-7]{1}-[1-9]{1}$/)
-
+    return 'room' if !!string.match(/^[A-Ba-b]{1}0[1-7]{1}-[0-9]{4}$/)
     'invalid'
   end
 
@@ -85,6 +85,9 @@ class Responder
         end
       end
       request.compact!
+    when 'room' 
+      block, room = string.split('-')
+      request = Student.where(block: block, room: room.to_i)
     else
       raise 'Invalid Input'
     end
@@ -111,11 +114,12 @@ class Responder
   end
 
   def start_message_text
-    "<b>Last Update:</b> #{updated_at}\n<b>Available Blocks:</b> #{available_blocks}\n\n<b>Usage:</b>\n\n" \
-      "Enter student <i>Name</i> to search by name(e.g. Bob)\n\n" \
-      "Enter student <i>_Surname</i> to search by surname(e.g. _Black)\n\n" \
-      "Enter <i>Name Surname</i> to search by name and surname(e.g. Bob Black)\n\n" \
-      'Enter <i>Block-Floor</i> to get a list for the entire floor(e.g. A03-7)'
+    "<b>Last Update:</b> #{updated_at}\n<b>Available Blocks:</b> #{available_blocks}\n\n<b>Usage:</b>\n\n" +
+      "Enter student <i>Name</i> to search by name(e.g. Bob)\n\n" +
+      "Enter student <i>_Surname</i> to search by surname(e.g. _Black)\n\n" +
+      "Enter <i>Name Surname</i> to search by name and surname(e.g. Bob Black)\n\n" +
+      'Enter <i>Block-Floor</i> to get a list for the entire floor(e.g. A03-7)' +
+      'Enter <i>Block-Room</i> to search by room(e.g. A03-123'
   end
 
   def start_message
