@@ -20,6 +20,7 @@ class Responder
     return 'name_surname' if !!string.capitalize.match(/^[a-zA-Z]{0,19}[\s,][a-zA-Z]{0,19}$/)
     return 'floor' if !!string.match(/^[A-Ba-b]{1}0[1-7]{1}-[1-9]{1}$/)
     return 'room' if !!string.match(/^[A-Ba-b]{1}0[1-7]{1}-[0-9]{4}$/)
+
     'invalid'
   end
 
@@ -61,7 +62,7 @@ class Responder
   def log_search(string)
     user.step = string
     user.save
-  end 
+  end
 
   def find_student(string)
     search_str = string
@@ -81,10 +82,12 @@ class Responder
       request = Student.where(block: block, floor: floor.to_i)
       request = uniq_request request
 
-    when 'room' 
+    when 'room'
       block, room = string.split('-')
       request = Student.where(block: block, room: room.to_i)
+      p request
       request = uniq_request request
+      p request
     else
       raise 'Invalid Input'
     end
@@ -98,15 +101,15 @@ class Responder
       if i != 0
         student.room == request[i - 1].room ? nil : student
       end
-    end 
-      return request.compact!
-  end 
+    end
+    request.compact!
+  end
 
   def validate
     user = User.find_by(telegram_id: message.from.id)
     if user.nil?
       user = User.create(telegram_id: message.from.id, step: 'new', access: false)
-      bot.api.send_message(chat_id: ENV['ADMIN_ID'], text: "New <a href=\"tg://user?id=#{message.from.id}\">User</a> Joined Bot.\n\n/accept_#{message.from.id} or /deny_#{message.from.id}",parse_mode: 'HTML')
+      bot.api.send_message(chat_id: ENV['ADMIN_ID'], text: "New <a href=\"tg://user?id=#{message.from.id}\">User</a> Joined Bot.\n\n/accept_#{message.from.id} or /deny_#{message.from.id}", parse_mode: 'HTML')
     end
     user
   end
@@ -120,11 +123,11 @@ class Responder
   end
 
   def start_message_text
-    "<b>Last Update:</b> #{updated_at}\n<b>Available Blocks:</b> #{available_blocks}\n\n<b>Usage:</b>\n\n" +
-      "Enter student <i>Name</i> to search by name(e.g. Bob)\n\n" +
-      "Enter student <i>_Surname</i> to search by surname(e.g. _Black)\n\n" +
-      "Enter <i>Name Surname</i> to search by name and surname(e.g. Bob Black)\n\n" +
-      'Enter <i>Block-Floor</i> to get a list for the entire floor(e.g. A03-7)' +
+    "<b>Last Update:</b> #{updated_at}\n<b>Available Blocks:</b> #{available_blocks}\n\n<b>Usage:</b>\n\n" \
+      "Enter student <i>Name</i> to search by name(e.g. Bob)\n\n" \
+      "Enter student <i>_Surname</i> to search by surname(e.g. _Black)\n\n" \
+      "Enter <i>Name Surname</i> to search by name and surname(e.g. Bob Black)\n\n" \
+      'Enter <i>Block-Floor</i> to get a list for the entire floor(e.g. A03-7)' \
       'Enter <i>Block-Room</i> to search by room(e.g. A03-123'
   end
 

@@ -7,28 +7,26 @@ class AdminResponder < Responder
     elsif message.text.include?('/accept_') || message.text.include?('/deny_')
       respond_to_access_request(*message.text.split('_'))
     elsif message.text.include?('/user_')
-        get_user_link(message.text.split('_').last)
+      get_user_link(message.text.split('_').last)
     elsif message.text == '/users'
-        show_users
+      show_users
     else
       find_student(message.text)
     end
   end
 
-  def show_users 
+  def show_users
     users = User.all
-        bot_users = ''
-        users.each do 
-          |user| 
-          bot_users += "User: <a href=\"tg://user?id=#{user.telegram_id.to_s}\">#{user.telegram_id.to_s}</a> Registrated: #{user.updated_at.strftime('%a %d %b %Y').to_s} | last request: #{user.step}\n\n"
-        end 
-        bot.api.send_message(chat_id: message.from.id, text: bot_users, parse_mode: "HTML")
-  end 
-
+    bot_users = ''
+    users.each do |user|
+      bot_users += "User: <a href=\"tg://user?id=#{user.telegram_id}\">#{user.telegram_id}</a> Registrated: #{user.updated_at.strftime('%a %d %b %Y')} | last request: #{user.step}\n\n"
+    end
+    bot.api.send_message(chat_id: message.from.id, text: bot_users, parse_mode: 'HTML')
+  end
 
   def get_user_link(user_id)
-    bot.api.send_message(chat_id: message.from.id, text: "User <a href=\"tg://user?id=#{user_id}\">#{user_id}</a>", parse_mode: "HTML")
-  end 
+    bot.api.send_message(chat_id: message.from.id, text: "User <a href=\"tg://user?id=#{user_id}\">#{user_id}</a>", parse_mode: 'HTML')
+  end
 
   def start_message
     bot.api.send_message(chat_id: message.from.id, text: "<b>Admin Menu</b>\n\n" + start_message_text, parse_mode: 'HTML')
