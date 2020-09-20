@@ -85,9 +85,7 @@ class Responder
     when 'room'
       block, room = string.split('-')
       request = Student.where(block: block, room: room.to_i)
-      p request
-      request = uniq_request request
-      p request
+      request = request.first 
     else
       raise 'Invalid Input'
     end
