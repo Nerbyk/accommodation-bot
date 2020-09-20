@@ -60,6 +60,7 @@ class Responder
 
   def log_search(string)
     user.step = string
+    user.save
   end 
 
   def find_student(string)
