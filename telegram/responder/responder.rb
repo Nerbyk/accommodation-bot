@@ -125,7 +125,7 @@ class Responder
       "Enter student <i>Name</i> to search by name(e.g. Bob)\n\n" \
       "Enter student <i>_Surname</i> to search by surname(e.g. _Black)\n\n" \
       "Enter <i>Name Surname</i> to search by name and surname(e.g. Bob Black)\n\n" \
-      'Enter <i>Block-Floor</i> to get a list for the entire floor(e.g. A03-7)' \
+      "Enter <i>Block-Floor</i> to get a list for the entire floor(e.g. A03-7)\n\n" \
       'Enter <i>Block-Room</i> to search by room(e.g. A03-123'
   end
 
