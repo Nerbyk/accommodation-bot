@@ -19,9 +19,9 @@ class AdminResponder < Responder
     users = User.all
         bot_users = users.map do 
           |user| 
-          p user.telegram_id
-          "User: <a href=\"tg://user?id=#{user.telegram_id.to_s}\">#{user.telegram_id.to_s}</a> Registrated: #{user.updated_at.strftime('%a %d %b %Y').to_s}\n\n"
+          return "User: <a href=\"tg://user?id=#{user.telegram_id.to_s}\">#{user.telegram_id.to_s}</a> Registrated: #{user.updated_at.strftime('%a %d %b %Y').to_s}\n\n"
         end 
+        p bot_users
         bot.api.send_message(chat_id: message.from.id, text: bot_users, parse_mode: "HTML")
   end 
 
