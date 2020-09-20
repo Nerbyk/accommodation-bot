@@ -79,15 +79,12 @@ class Responder
     when 'floor'
       block, floor = string.split('-')
       request = Student.where(block: block, floor: floor.to_i)
-      request = request.each_with_index.map do |student, i|
-        if i != 0
-          student.room == request[i - 1].room ? nil : student
-        end
-      end
-      request.compact!
+      request = uniq_request request
+
     when 'room' 
       block, room = string.split('-')
       request = Student.where(block: block, room: room.to_i)
+      request = uniq_request request
     else
       raise 'Invalid Input'
     end
@@ -95,6 +92,15 @@ class Responder
     log_search(string)
     render_person request
   end
+
+  def uniq_request(request)
+    request = request.each_with_index.map do |student, i|
+      if i != 0
+        student.room == request[i - 1].room ? nil : student
+      end
+    end 
+      return request.compact!
+  end 
 
   def validate
     user = User.find_by(telegram_id: message.from.id)
