@@ -108,7 +108,11 @@ class Responder
     if user.nil?
       user = User.create(telegram_id: message.from.id, step: 'new', access: false)
       bot.api.send_message(chat_id: ENV['ADMIN_ID'], text: "New <a href=\"tg://user?id=#{message.from.id}\">User</a> Joined Bot.\n\n/accept_#{message.from.id} or /deny_#{message.from.id}", parse_mode: 'HTML')
-    end
+    end 
+    if user.name.nil?
+      user.name = message.from.first_name
+      user.save
+    end 
     user
   end
 
@@ -131,7 +135,6 @@ class Responder
 
   def start_message
     bot.api.send_message(chat_id: message.from.id, text: start_message_text, parse_mode: 'HTML')
-    p available_blocks
   end
 
   def menu

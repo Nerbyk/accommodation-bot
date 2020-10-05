@@ -19,7 +19,9 @@ class AdminResponder < Responder
     users = User.all
     bot_users = ''
     users.each do |user|
-      bot_users += "User: <a href=\"tg://user?id=#{user.telegram_id}\">#{user.telegram_id}</a> Registrated: #{user.updated_at.strftime('%a %d %b %Y')} | last request: #{user.step}\n\n"
+      user_name = user.name.nil? ? 'N/A' : user.name
+      next if !user.access
+      bot_users += "User: <a href=\"tg://user?id=#{user.telegram_id}\">#{user_name}</a> Registrated: #{user.updated_at.strftime('%a %d %b %Y')} | last request: #{user.step}\n\n"
     end
     bot.api.send_message(chat_id: message.from.id, text: bot_users, parse_mode: 'HTML')
   end
