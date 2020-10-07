@@ -10,6 +10,8 @@ class AdminResponder < Responder
       get_user_link(message.text.split('_').last)
     elsif message.text == '/users'
       show_users
+    elsif message.text.include?('/amount_') 
+      show_amount(message.text)
     else
       find_student(message.text)
     end

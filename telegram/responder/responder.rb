@@ -83,9 +83,13 @@ class Responder
       request = uniq_request request
 
     when 'room'
-      block, room = string.split('-')
-      request = Student.where(block: block, room: room.to_i)
-      request = [request.first ]
+      begin  
+        block, room = string.split('-')
+        request = Student.where(block: block, room: room.to_i)
+        request = [request.first ]
+      rescue  
+        raise "Room is Empty"
+      end 
     else
       raise 'Invalid Input'
     end
@@ -121,30 +125,40 @@ class Responder
   end
 
   def available_blocks
-    Student.distinct.pluck(:block).join(', ')
+    Student.distinct.pluck(:block)
   end
 
   def start_message_text
-    "<b>Last Update:</b> #{updated_at}\n<b>Available Blocks:</b> #{available_blocks}\n\n<b>Usage:</b>\n\n" \
-      "Enter student <i>Name</i> to search by name(e.g. Bob)\n\n" \
-      "Enter student <i>_Surname</i> to search by surname(e.g. _Black)\n\n" \
-      "Enter <i>Name Surname</i> to search by name and surname(e.g. Bob Black)\n\n" \
-      "Enter <i>Block-Floor</i> to get a list for the entire floor(e.g. A03-7)\n\n" \
-      'Enter <i>Block-Room</i> to search by room(e.g. A03-123'
+    "<b>Last Update:</b> #{updated_at}\n<b>Available Blocks:</b> #{available_blocks.join(', ')}\n\n<b>Usage:</b>\n\n" +
+      "Enter student <i>Name</i> to search by name(e.g. Bob)\n\n" +
+      "Enter student <i>_Surname</i> to search by surname(e.g. _Black)\n\n" +
+      "Enter <i>Name Surname</i> to search by name and surname(e.g. Bob Black)\n\n" +
+      "Enter <i>Block-Floor</i> to get a list for the entire floor(e.g. A03-7)\n\n" +
+      "Enter <i>Block-Room</i> to search by room(e.g. A03-0123\n\n" +
+      'Enter \'/amount_block\' to get an amount of students per block (e.g. /amount_A03)' 
   end
 
   def start_message
     bot.api.send_message(chat_id: message.from.id, text: start_message_text, parse_mode: 'HTML')
   end
 
+  def show_amount(msg)
+    raise 'Incorrect input' if !msg.match(/^\/amount_[A-Ba-b]{1}0[1-7]{1}$/)
+    block = msg.split('_').last
+    raise 'This block is not Available' unless available_blocks.include?(block)
+    amount = Student.where(block: block).length  
+    bot.api.send_message(chat_id: message.from.id, text: "#{block} - Currently checked-in: <b>#{amount.to_s}</b>\nTotal amount of beds: ~<b>#{(41*9*2).to_s}</b>", parse_mode: "HTML")
+  end 
+
   def menu
     unless user.access
       access_denied
       return
     end
-
     if message.text == '/start'
       start_message
+    elsif message.text.include?('/amount_') 
+      show_amount(message.text)
     else
       find_student(message.text)
     end
